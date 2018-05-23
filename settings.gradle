@@ -1,0 +1,1 @@
+include ':app', ':bx-large-image-viewer'
