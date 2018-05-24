@@ -1,5 +1,5 @@
 
-# BX-Large-Image-Viewer-Android- Large image viewer library for Android
+# BX-Large-Image-Viewer-Android :Large image viewer library for Android
 
 #### This project aims to provide an full screen image viewer based on Fresco. Supports Gif as well. Made by [BrainxTech](https://brainxtech.com/)
 
@@ -31,7 +31,7 @@ compile 'com.brainx.android:bx-large-image-viewer:1.0'
 
 
 3.The BXCrop configuration.
-#####Simple usage
+
 ```
   BxImageViewer bxImageViewer = BxImageViewer.getInstance(this);
   bxImageViewer.initialization()
