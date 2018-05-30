@@ -1,6 +1,7 @@
 package com.example.bxlargeimageviewer.Adapters;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +17,11 @@ public class ImageViewAdapter extends RecyclingPagerAdapter<PagerViewHolder> {
 
     private List<String> imageURIs;
     Context context;
+    private int progressBarColor = -1;
+
     public ImageViewAdapter(Context context) {
-        this.context=context;
+        this.context = context;
+
     }
 
     @Override
@@ -31,7 +35,11 @@ public class ImageViewAdapter extends RecyclingPagerAdapter<PagerViewHolder> {
 
     @Override
     public void onBindViewHolder(PagerViewHolder holder, int position) {
-        holder.onBind(position);
+        if (progressBarColor == -1) {
+            progressBarColor = R.color.bxColorWhite;
+        }
+        holder.onBind(position, progressBarColor);
+
     }
 
     @Override
@@ -43,5 +51,10 @@ public class ImageViewAdapter extends RecyclingPagerAdapter<PagerViewHolder> {
 
     public void addDataSet(List<String> imageURIs) {
         this.imageURIs = imageURIs;
+
+    }
+
+    public void setProgressBarColor(int progressBarColor) {
+        this.progressBarColor = progressBarColor;
     }
 }

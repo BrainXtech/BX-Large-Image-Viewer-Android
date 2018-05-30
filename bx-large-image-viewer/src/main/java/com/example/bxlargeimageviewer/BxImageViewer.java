@@ -2,6 +2,7 @@ package com.example.bxlargeimageviewer;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.annotation.DimenRes;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
@@ -32,7 +33,8 @@ public class BxImageViewer {
     private static BxImageViewer bxImageViewer;
     private static Context context;
     private static AlertDialog alertDialog;
-
+    private int backgroundColor;
+    private int imageMarginPixels;
     //endregion
 
     //region Public Static Method
@@ -53,13 +55,11 @@ public class BxImageViewer {
     }
 
     public BxImageViewer initialization() {
+
         initView();
-        imageViewer.setBackgroundColor(Color.BLACK);
         initAdapter();
         onDismiss();
-        alertDialog = new AlertDialog.Builder(context, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen)
-                .setView(imageViewer)
-                .create();
+        imageViewer.setBackgroundResource(R.color.bxColorBlack);
         return bxImageViewer;
     }
 
@@ -83,6 +83,11 @@ public class BxImageViewer {
             viewPager.setAdapter(imageViewAdapter);
     }
 
+    private void setupAlertDialog() {
+        alertDialog = new AlertDialog.Builder(context, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen)
+                .setView(imageViewer)
+                .create();
+    }
     //endregion
 
     //region public method
@@ -101,7 +106,7 @@ public class BxImageViewer {
     public BxImageViewer setStartPosition(int selectedPosition) {
         if (selectedPosition < 0) {
             this.selectedPosition = 0;
-        }else {
+        } else {
             this.selectedPosition = selectedPosition;
         }
         return bxImageViewer;
@@ -116,12 +121,54 @@ public class BxImageViewer {
         return bxImageViewer;
     }
 
+    public BxImageViewer setBackgroundColor(int color) {
+        try {
+            imageViewer.setBackgroundColor(color);
+        } catch (Exception e) {
+        }
+        return bxImageViewer;
+    }
+
+    public BxImageViewer setBackgroundColorRes(int color) {
+        try {
+            imageViewer.setBackgroundResource(color);
+        } catch (Exception e) {
+        }
+        return bxImageViewer;
+    }
+
+    public BxImageViewer setImageMarginPx(int marginPixels) {
+        try {
+            this.imageMarginPixels = marginPixels;
+            viewPager.setPageMargin(imageMarginPixels);
+        } catch (Exception e) {
+        }
+        return this;
+    }
+
+
+    public BxImageViewer setImageMargin(Context context, @DimenRes int dimen) {
+        try {
+            this.imageMarginPixels = Math.round(context.getResources().getDimension(dimen));
+            viewPager.setPageMargin(imageMarginPixels);
+        } catch (Exception e) {
+        }
+        return this;
+    }
+
+    public BxImageViewer setProgressBarColorRes(int progressBarColor) {
+        imageViewAdapter.setProgressBarColor(progressBarColor);
+        return bxImageViewer;
+    }
+
     public BxImageViewer setImageChangeListener(OnImageChangeListener imageChangeListener) {
+
         this.imageChangeListener = imageChangeListener;
         return bxImageViewer;
     }
 
     public void show() {
+        setupAlertDialog();
         if (alertDialog != null && !alertDialog.isShowing()) {
             setViewPagerAdapter();
             setViewPagerListener();
@@ -131,7 +178,9 @@ public class BxImageViewer {
             if (selectedPosition > 0) {
                 viewPager.setCurrentItem(selectedPosition);
             }
-            imageChangeListener.onImageChanged(selectedPosition);
+            if (imageChangeListener != null)
+                imageChangeListener.onImageChanged(selectedPosition);
+            if (totalImages > 0)
             alertDialog.show();
         }
     }
@@ -164,7 +213,8 @@ public class BxImageViewer {
         public void onPageScrollStateChanged(int state) {
             if (ViewPager.SCROLL_STATE_IDLE == state) {
                 if (position != prevPosition) {
-                    imageChangeListener.onImageChanged(position);
+                    if (imageChangeListener != null)
+                        imageChangeListener.onImageChanged(position);
                     prevPosition = position;
                 }
             }
@@ -174,7 +224,7 @@ public class BxImageViewer {
     //endregion
 
     //region Listener
-    public interface OnImageChangeListener{
+    public interface OnImageChangeListener {
         void onImageChanged(int position);
     }
     //endregion

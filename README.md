@@ -9,7 +9,7 @@
 ##### You can depend on the library through Gradle
 Add image-croppe to the dependencies block in your app level build.gradle:
 ```groovy
-compile 'com.brainx.android:bx-large-image-viewer:1.1'
+compile 'com.brainx.android:bx-large-image-viewer:1.3'
 ```
 
 ##### Or through Maven
@@ -17,7 +17,7 @@ compile 'com.brainx.android:bx-large-image-viewer:1.1'
     <dependency> 
         <groupId>com.brainx.android</groupId>
         <artifactId>bx-large-image-viewer</artifactId>
-        <version>1.1</version>
+        <version>1.3</version>
         <type>pom</type> 
     </dependency>
 ```
@@ -37,6 +37,9 @@ compile 'com.brainx.android:bx-large-image-viewer:1.1'
   bxImageViewer.initialization()
                .setImageChangeListener(imageChangeListener)
                .addDataSet(imageUrlList)
+               .setBackgroundColorRes(R.color.colorAccent)
+               .setProgressBarColorRes(R.color.colorWhite)
+               .setImageMarginPx(20)
                .setStartPosition(0)
                .setOverlayView(headerView)
                .show();
@@ -77,6 +80,14 @@ Initial Build
 
 ```
 Initial Build
+```
+#### Version: 1.2
+
+```
+Add new method.
+    setBackgroundColorRes();
+    setImageMarginPx();
+    setProgressBarColorRes()
 ```
 
 ### Let us know!
