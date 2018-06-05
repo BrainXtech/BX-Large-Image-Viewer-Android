@@ -146,7 +146,6 @@ public class BxImageViewer {
         return this;
     }
 
-
     public BxImageViewer setImageMargin(Context context, @DimenRes int dimen) {
         try {
             this.imageMarginPixels = Math.round(context.getResources().getDimension(dimen));
@@ -181,10 +180,9 @@ public class BxImageViewer {
             if (imageChangeListener != null)
                 imageChangeListener.onImageChanged(selectedPosition);
             if (totalImages > 0)
-            alertDialog.show();
+                alertDialog.show();
         }
     }
-
 
     public void onDismiss() {
         if (alertDialog != null && alertDialog.isShowing()) {
@@ -193,31 +191,23 @@ public class BxImageViewer {
     }
 
     //endregion
-//region CallBack
 
+    //region CallBack
     ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
-        int prevPosition = -1;
-        int position;
 
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            this.position = position;
-        }
+       }
 
         @Override
         public void onPageSelected(int position) {
-
+            if (imageChangeListener != null)
+                imageChangeListener.onImageChanged(position);
         }
 
         @Override
         public void onPageScrollStateChanged(int state) {
-            if (ViewPager.SCROLL_STATE_IDLE == state) {
-                if (position != prevPosition) {
-                    if (imageChangeListener != null)
-                        imageChangeListener.onImageChanged(position);
-                    prevPosition = position;
-                }
-            }
+
         }
     };
 
