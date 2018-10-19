@@ -9,16 +9,16 @@
 ##### You can depend on the library through Gradle
 Add image-croppe to the dependencies block in your app level build.gradle:
 ```groovy
-compile 'com.brainx.android:bx-large-image-viewer:1.4'
+compile 'com.brainx.android:bx-large-image-viewer:1.5'
 ```
 
 ##### Or through Maven
 ```gradle
-    <dependency> 
+    <dependency>
         <groupId>com.brainx.android</groupId>
         <artifactId>bx-large-image-viewer</artifactId>
         <version>1.4</version>
-        <type>pom</type> 
+        <type>pom</type>
     </dependency>
 ```
 
@@ -26,7 +26,7 @@ compile 'com.brainx.android:bx-large-image-viewer:1.4'
  2.Add permissions to manifest
 
 ```
-<uses-permission android:name="android.permission.INTERNET" /> 
+<uses-permission android:name="android.permission.INTERNET" />
 ```
 
 
@@ -55,7 +55,7 @@ BxImageViewer.OnImageChangeListener imageChangeListener = new BxImageViewer.OnIm
 
         }
     };
-    
+
 ```
 
 # Features
@@ -69,7 +69,7 @@ BxImageViewer.OnImageChangeListener imageChangeListener = new BxImageViewer.OnIm
 ```
 
 
-# Changelog
+# Change log
 
 #### Version: 1.0
 
@@ -89,6 +89,21 @@ Add new method.
     setImageMarginPx();
     setProgressBarColorRes()
 ```
+
+#### Version: 1.5
+
+```
+Added the Support of Android 9.0 Pie.
+```
+# Development
+
+Incrementing the build version
+
+- Update the version number references in the above     **Installation** section
+- Update the `libraryVersion` in the SDK's `build.gradle` file (/bx-large-image-viewer/build.gradle)
+- Run the following command on the root of the project. `./gradlew install bintrayUpload`. Make sure
+you have the correct `bintray.user` & `bintray.apikey` values in `local.properties` file.
+- Commit & push the changes
 
 ### Let us know!
 
