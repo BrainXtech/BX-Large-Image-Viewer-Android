@@ -1,8 +1,7 @@
 package com.brainx.bx_large_image_viewer_android1;
 
-import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
@@ -31,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //region Private method
     private List<String> getImagesList() {
         List<String> stringList = new ArrayList<>();
-        stringList.add("http://www.kinyu-z.net/data/wallpapers/35/8239421.jpg");
+        stringList.add("https://images.unsplash.com/photo-1550354256-48abc7b2318c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=562&q=80");
         stringList.add("https://media.giphy.com/media/Rxb9AZOq1U1Vu/giphy.gif");
         stringList.add("https://media.istockphoto.com/photos/plant-growing-picture-id510222832");
         return stringList;

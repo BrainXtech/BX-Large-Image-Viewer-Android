@@ -1,7 +1,6 @@
 package com.example.bxlargeimageviewer;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.DimenRes;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
