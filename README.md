@@ -9,7 +9,7 @@
 ##### You can depend on the library through Gradle
 Add image-croppe to the dependencies block in your app level build.gradle:
 ```groovy
-compile 'com.brainx.android:bx-large-image-viewer:1.5'
+compile 'com.brainx.android:bx-large-image-viewer:1.7'
 ```
 
 ##### Or through Maven
@@ -17,7 +17,7 @@ compile 'com.brainx.android:bx-large-image-viewer:1.5'
     <dependency>
         <groupId>com.brainx.android</groupId>
         <artifactId>bx-large-image-viewer</artifactId>
-        <version>1.4</version>
+        <version>1.7</version>
         <type>pom</type>
     </dependency>
 ```
@@ -94,6 +94,12 @@ Add new method.
 
 ```
 Added the Support of Android 9.0 Pie.
+```
+
+#### Version: 1.7
+
+```
+Changed compile to implementation.
 ```
 # Development
 
