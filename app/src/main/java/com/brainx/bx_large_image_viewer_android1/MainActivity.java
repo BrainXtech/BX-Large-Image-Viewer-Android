@@ -5,14 +5,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.bxlargeimageviewer.BxImageViewer;
+import com.example.bxlargeimageviewer.BxImageViewerV2;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     List<String> imageUrlList;
-    View headerView;
+    BxImageViewerV2 imageViewerV2;
 
     //region Lifecycle
     @Override
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //endregion
 
     //region CallBack
-    BxImageViewer.OnImageChangeListener imageChangeListener = new BxImageViewer.OnImageChangeListener() {
+    BxImageViewerV2.OnImageChangeListener imageChangeListener = new BxImageViewerV2.OnImageChangeListener() {
         @Override
         public void onImageChanged(int position) {
 
@@ -47,17 +47,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        headerView = View.inflate(this, R.layout.custom_header_view, null);
-        BxImageViewer bxImageViewer = BxImageViewer.getInstance(this);
-        bxImageViewer.initialization()
-                .setImageChangeListener(imageChangeListener)
-                .addDataSet(imageUrlList)
-                .setBackgroundColorRes(R.color.colorBlack)
-                .setProgressBarColorRes(R.color.colorWhite)
-                .setImageMarginPx(20)
-                .setStartPosition(0)
-                .setOverlayView(headerView)
-                .show();
+        if (view.getId() == R.id.button_view) {
+            View headerView = View.inflate(this, R.layout.custom_header_view, null);
+            headerView.findViewById(R.id.bx_Close).setOnClickListener(this);
+
+            imageViewerV2 = new BxImageViewerV2.Builder(this)
+                    .setImageChangeListener(imageChangeListener)
+                    .setDataSet(imageUrlList)
+                    .setBackgroundColorRes(R.color.colorBlack)
+                    .setProgressbarColorRes(R.color.colorWhite)
+                    .setImageMarginPx(20)
+                    .setStartPosition(0)
+                    .setHeaderView(headerView)
+                    .show();
+
+        } else if (view.getId() == R.id.bx_Close) {
+            if (imageViewerV2 != null)
+                imageViewerV2.dismiss();
+        }
     }
+
     //endregion
 }
