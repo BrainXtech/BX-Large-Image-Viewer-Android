@@ -1,7 +1,11 @@
 package com.example.bxlargeimageviewer;
 
 import android.content.Context;
+import android.support.annotation.ColorInt;
+import android.support.annotation.ColorRes;
 import android.support.annotation.DimenRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
@@ -18,64 +22,54 @@ import java.util.List;
 public class BxImageViewer {
 
     //region Properties
+    @NonNull
+    private Builder builder;
     private int totalImages = 0;
-    private int selectedPosition = 0;
 
+    @Nullable
     private ImageViewAdapter imageViewAdapter;
-    private View header;
+    @Nullable
     private View imageViewer;
+    @Nullable
     private ViewPager viewPager;
+    @Nullable
     private ViewGroup headerContainer;
 
-    private OnImageChangeListener imageChangeListener;
-    private List<String> imageURIs;
-    private static BxImageViewer bxImageViewer;
-    private static Context context;
-    private static AlertDialog alertDialog;
-    private int backgroundColor;
-    private int imageMarginPixels;
+    @Nullable
+    private AlertDialog alertDialog;
     //endregion
 
     //region Public Static Method
-    public static BxImageViewer getInstance(Context con) {
-        context = con;
-        if (bxImageViewer == null) {
-            bxImageViewer = new BxImageViewer();
-        }
-        return bxImageViewer;
+
+    private BxImageViewer(@NonNull Builder builder) {
+        this.builder = builder;
+        initView();
+        initAdapter();
+        setDataSet();
+        setOverlayView();
+        setBackgroundColor();
+        setImageMarginPx();
+        setProgressBarColor();
     }
+
     //endregion
 
-    //region initialization
+    //region Private method
     private void initView() {
-        imageViewer = View.inflate(context, R.layout.image_view_layout, null);
+        imageViewer = View.inflate(builder.mContext, R.layout.image_view_layout, null);
         viewPager = imageViewer.findViewById(R.id.my_pager);
         headerContainer = imageViewer.findViewById(R.id.header_container);
     }
 
-    public BxImageViewer initialization() {
-
-        initView();
-        initAdapter();
-        onDismiss();
-        imageViewer.setBackgroundResource(R.color.bxColorBlack);
-        return bxImageViewer;
-    }
-
     private void initAdapter() {
-        imageViewAdapter = new ImageViewAdapter(context);
+        imageViewAdapter = new ImageViewAdapter(builder.mContext);
     }
 
-    //endregion
-
-    //region setListener
     private void setViewPagerListener() {
-        viewPager.setOnPageChangeListener(onPageChangeListener);
+        if (viewPager != null) {
+            viewPager.setOnPageChangeListener(onPageChangeListener);
+        }
     }
-
-    //endregion
-
-    //region private method
 
     private void setViewPagerAdapter() {
         if (viewPager != null && imageViewAdapter != null)
@@ -83,125 +77,92 @@ public class BxImageViewer {
     }
 
     private void setupAlertDialog() {
-        alertDialog = new AlertDialog.Builder(context, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen)
+        alertDialog = new AlertDialog.Builder(builder.mContext,
+                android.R.style.Theme_Translucent_NoTitleBar_Fullscreen)
                 .setView(imageViewer)
                 .create();
     }
-    //endregion
 
-    //region public method
-
-
-    public BxImageViewer addDataSet(List<String> imageURIs) {
-        this.imageURIs = imageURIs;
-        if (imageURIs != null) {
-            totalImages = imageURIs.size();
+    private void setDataSet() {
+        if (builder.imageURIs != null) {
+            totalImages = builder.imageURIs.size();
         }
         if (viewPager != null && imageViewAdapter != null)
-            imageViewAdapter.addDataSet(imageURIs);
-        return bxImageViewer;
+            imageViewAdapter.addDataSet(builder.imageURIs);
     }
 
-    public BxImageViewer setStartPosition(int selectedPosition) {
-        if (selectedPosition < 0) {
-            this.selectedPosition = 0;
-        } else {
-            this.selectedPosition = selectedPosition;
-        }
-        return bxImageViewer;
+    private void setOverlayView() {
+        if (headerContainer == null || builder.headerView == null)
+            return;
+
+        headerContainer.removeAllViews();
+        headerContainer.addView(builder.headerView);
     }
 
-    public BxImageViewer setOverlayView(View header) {
-        this.header = header;
-        if (headerContainer != null) {
-            headerContainer.removeAllViews();
-            headerContainer.addView(header);
-        }
-        return bxImageViewer;
-    }
-
-    public BxImageViewer setBackgroundColor(int color) {
+    private void setBackgroundColor() {
         try {
-            imageViewer.setBackgroundColor(color);
-        } catch (Exception e) {
+            if (imageViewer != null)
+                imageViewer.setBackgroundColor(builder.backgroundColor);
+        } catch (Exception ignore) {
         }
-        return bxImageViewer;
     }
 
-    public BxImageViewer setBackgroundColorRes(int color) {
+    private void setImageMarginPx() {
         try {
-            imageViewer.setBackgroundResource(color);
-        } catch (Exception e) {
+            if (viewPager != null)
+                viewPager.setPageMargin(builder.imageMarginPixels);
+        } catch (Exception ignore) {
         }
-        return bxImageViewer;
     }
 
-    public BxImageViewer setImageMarginPx(int marginPixels) {
-        try {
-            this.imageMarginPixels = marginPixels;
-            viewPager.setPageMargin(imageMarginPixels);
-        } catch (Exception e) {
-        }
-        return this;
+    private void setProgressBarColor() {
+        if (imageViewAdapter != null)
+            imageViewAdapter.setProgressBarColor(builder.progressbarColor);
     }
 
-    public BxImageViewer setImageMargin(Context context, @DimenRes int dimen) {
-        try {
-            this.imageMarginPixels = Math.round(context.getResources().getDimension(dimen));
-            viewPager.setPageMargin(imageMarginPixels);
-        } catch (Exception e) {
-        }
-        return this;
-    }
+    //endregion
 
-    public BxImageViewer setProgressBarColorRes(int progressBarColor) {
-        imageViewAdapter.setProgressBarColor(progressBarColor);
-        return bxImageViewer;
-    }
-
-    public BxImageViewer setImageChangeListener(OnImageChangeListener imageChangeListener) {
-
-        this.imageChangeListener = imageChangeListener;
-        return bxImageViewer;
-    }
+    //region Pubic methods
 
     public void show() {
         setupAlertDialog();
-        if (alertDialog != null && !alertDialog.isShowing()) {
-            setViewPagerAdapter();
-            setViewPagerListener();
-            if (selectedPosition >= totalImages) {
-                selectedPosition = totalImages - 1;
-            }
-            if (selectedPosition > 0) {
-                viewPager.setCurrentItem(selectedPosition);
-            }
-            if (imageChangeListener != null)
-                imageChangeListener.onImageChanged(selectedPosition);
-            if (totalImages > 0)
-                alertDialog.show();
-        }
+
+        if (alertDialog == null || alertDialog.isShowing())
+            return;
+
+        setViewPagerAdapter();
+        setViewPagerListener();
+
+        if (builder.startingPos >= totalImages)
+            builder.startingPos = totalImages - 1;
+
+        if (viewPager != null && builder.startingPos > 0)
+            viewPager.setCurrentItem(builder.startingPos);
+
+        if (builder.imageChangeListener != null)
+            builder.imageChangeListener.onImageChanged(builder.startingPos);
+        if (totalImages > 0)
+            alertDialog.show();
     }
 
-    public void onDismiss() {
-        if (alertDialog != null && alertDialog.isShowing()) {
+    public void dismiss() {
+        if (alertDialog != null && alertDialog.isShowing())
             alertDialog.dismiss();
-        }
     }
 
     //endregion
 
     //region CallBack
-    ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
+    private ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
 
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-       }
+        }
 
         @Override
         public void onPageSelected(int position) {
-            if (imageChangeListener != null)
-                imageChangeListener.onImageChanged(position);
+            if (builder.imageChangeListener != null)
+                builder.imageChangeListener.onImageChanged(position);
         }
 
         @Override
@@ -209,6 +170,105 @@ public class BxImageViewer {
 
         }
     };
+
+    //endregion
+
+    //region Builder
+
+    public static class Builder {
+        @NonNull
+        private final Context mContext;
+        @Nullable
+        private OnImageChangeListener imageChangeListener;
+        @Nullable
+        private List<String> imageURIs;
+
+        private int startingPos = 0;
+
+        @ColorInt
+        private int backgroundColor;
+        @ColorInt
+        private int progressbarColor;
+
+        private int imageMarginPixels;
+
+        @Nullable
+        private View headerView;
+
+        public Builder(@NonNull Context mContext) {
+            this.mContext = mContext;
+            this.backgroundColor = mContext.getResources().getColor(R.color.bxColorBlack);
+            this.progressbarColor = mContext.getResources().getColor(R.color.bxColorWhite);
+            this.imageMarginPixels = 0;
+        }
+
+        public Builder setImageChangeListener(@Nullable OnImageChangeListener imageChangeListener) {
+            this.imageChangeListener = imageChangeListener;
+            return this;
+        }
+
+        public Builder setDataSet(@Nullable List<String> imageURIs) {
+            this.imageURIs = imageURIs;
+            return this;
+        }
+
+        public Builder setStartPosition(int pos) {
+            if (pos < 0) {
+                this.startingPos = 0;
+            } else {
+                this.startingPos = pos;
+            }
+            return this;
+        }
+
+        public Builder setBackgroundColorRes(@ColorRes int color) {
+            this.backgroundColor = mContext.getResources().getColor(color);
+            return this;
+        }
+
+        public Builder setBackgroundColor(@ColorInt int color) {
+            this.backgroundColor = color;
+            return this;
+        }
+
+        public Builder setProgressbarColorRes(@ColorRes int color) {
+            this.progressbarColor = mContext.getResources().getColor(color);
+            return this;
+        }
+
+        public Builder setProgressbarColor(@ColorInt int color) {
+            this.progressbarColor = color;
+            return this;
+        }
+
+        public Builder setImageMarginRes(@DimenRes int dimen) {
+            try {
+                this.imageMarginPixels = Math.round(mContext.getResources().getDimension(dimen));
+            } catch (Exception ignored) {
+            }
+            return this;
+        }
+
+        public Builder setImageMarginPx(int dimen) {
+            this.imageMarginPixels = dimen;
+            return this;
+        }
+
+        public Builder setHeaderView(@Nullable View headerView) {
+            this.headerView = headerView;
+            return this;
+        }
+
+        public BxImageViewer show() {
+            BxImageViewer viewer = this.create();
+            viewer.show();
+            return viewer;
+        }
+
+        public BxImageViewer create() {
+            return new BxImageViewer(this);
+        }
+    }
 
     //endregion
 

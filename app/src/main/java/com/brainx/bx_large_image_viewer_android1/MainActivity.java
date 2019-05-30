@@ -5,14 +5,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.bxlargeimageviewer.BxImageViewerV2;
+import com.example.bxlargeimageviewer.BxImageViewer;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     List<String> imageUrlList;
-    BxImageViewerV2 imageViewerV2;
+    BxImageViewer imageViewer;
 
     //region Lifecycle
     @Override
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //endregion
 
     //region CallBack
-    BxImageViewerV2.OnImageChangeListener imageChangeListener = new BxImageViewerV2.OnImageChangeListener() {
+    BxImageViewer.OnImageChangeListener imageChangeListener = new BxImageViewer.OnImageChangeListener() {
         @Override
         public void onImageChanged(int position) {
 
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             View headerView = View.inflate(this, R.layout.custom_header_view, null);
             headerView.findViewById(R.id.bx_Close).setOnClickListener(this);
 
-            imageViewerV2 = new BxImageViewerV2.Builder(this)
+            imageViewer = new BxImageViewer.Builder(this)
                     .setImageChangeListener(imageChangeListener)
                     .setDataSet(imageUrlList)
                     .setBackgroundColorRes(R.color.colorBlack)
@@ -62,8 +62,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     .show();
 
         } else if (view.getId() == R.id.bx_Close) {
-            if (imageViewerV2 != null)
-                imageViewerV2.dismiss();
+            if (imageViewer != null)
+                imageViewer.dismiss();
         }
     }
 
