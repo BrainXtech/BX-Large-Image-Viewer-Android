@@ -5,6 +5,7 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DimenRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
@@ -21,20 +22,26 @@ import java.util.List;
 public class BxImageViewerV2 {
 
     //region Properties
+    @NonNull
     private Builder builder;
     private int totalImages = 0;
 
+    @Nullable
     private ImageViewAdapter imageViewAdapter;
+    @Nullable
     private View imageViewer;
+    @Nullable
     private ViewPager viewPager;
+    @Nullable
     private ViewGroup headerContainer;
 
+    @Nullable
     private AlertDialog alertDialog;
     //endregion
 
     //region Public Static Method
 
-    private BxImageViewerV2(Builder builder) {
+    private BxImageViewerV2(@NonNull Builder builder) {
         this.builder = builder;
         initView();
         initAdapter();
@@ -59,7 +66,9 @@ public class BxImageViewerV2 {
     }
 
     private void setViewPagerListener() {
-        viewPager.setOnPageChangeListener(onPageChangeListener);
+        if (viewPager != null) {
+            viewPager.setOnPageChangeListener(onPageChangeListener);
+        }
     }
 
     private void setViewPagerAdapter() {
@@ -92,7 +101,7 @@ public class BxImageViewerV2 {
 
     private void setBackgroundColor() {
         try {
-            if (builder.backgroundColor != -1)
+            if (imageViewer != null)
                 imageViewer.setBackgroundColor(builder.backgroundColor);
         } catch (Exception ignore) {
         }
@@ -100,13 +109,15 @@ public class BxImageViewerV2 {
 
     private void setImageMarginPx() {
         try {
-            viewPager.setPageMargin(builder.imageMarginPixels);
+            if (viewPager != null)
+                viewPager.setPageMargin(builder.imageMarginPixels);
         } catch (Exception ignore) {
         }
     }
 
     private void setProgressBarColor() {
-        imageViewAdapter.setProgressBarColor(builder.progressbarColor);
+        if (imageViewAdapter != null)
+            imageViewAdapter.setProgressBarColor(builder.progressbarColor);
     }
 
     //endregion
@@ -115,26 +126,28 @@ public class BxImageViewerV2 {
 
     public void show() {
         setupAlertDialog();
-        if (alertDialog != null && !alertDialog.isShowing()) {
-            setViewPagerAdapter();
-            setViewPagerListener();
-            if (builder.startingPos >= totalImages) {
-                builder.startingPos = totalImages - 1;
-            }
-            if (builder.startingPos > 0) {
-                viewPager.setCurrentItem(builder.startingPos);
-            }
-            if (builder.imageChangeListener != null)
-                builder.imageChangeListener.onImageChanged(builder.startingPos);
-            if (totalImages > 0)
-                alertDialog.show();
-        }
+
+        if (alertDialog == null || alertDialog.isShowing())
+            return;
+
+        setViewPagerAdapter();
+        setViewPagerListener();
+
+        if (builder.startingPos >= totalImages)
+            builder.startingPos = totalImages - 1;
+
+        if (viewPager != null && builder.startingPos > 0)
+            viewPager.setCurrentItem(builder.startingPos);
+
+        if (builder.imageChangeListener != null)
+            builder.imageChangeListener.onImageChanged(builder.startingPos);
+        if (totalImages > 0)
+            alertDialog.show();
     }
 
     public void dismiss() {
-        if (alertDialog != null && alertDialog.isShowing()) {
+        if (alertDialog != null && alertDialog.isShowing())
             alertDialog.dismiss();
-        }
     }
 
     //endregion
@@ -163,8 +176,11 @@ public class BxImageViewerV2 {
     //region Builder
 
     public static class Builder {
+        @NonNull
         private final Context mContext;
+        @Nullable
         private OnImageChangeListener imageChangeListener;
+        @Nullable
         private List<String> imageURIs;
 
         private int startingPos = 0;
@@ -176,6 +192,7 @@ public class BxImageViewerV2 {
 
         private int imageMarginPixels;
 
+        @Nullable
         private View headerView;
 
         public Builder(@NonNull Context mContext) {
@@ -185,12 +202,12 @@ public class BxImageViewerV2 {
             this.imageMarginPixels = 0;
         }
 
-        public Builder setImageChangeListener(OnImageChangeListener imageChangeListener) {
+        public Builder setImageChangeListener(@Nullable OnImageChangeListener imageChangeListener) {
             this.imageChangeListener = imageChangeListener;
             return this;
         }
 
-        public Builder setDataSet(List<String> imageURIs) {
+        public Builder setDataSet(@Nullable List<String> imageURIs) {
             this.imageURIs = imageURIs;
             return this;
         }
@@ -237,7 +254,7 @@ public class BxImageViewerV2 {
             return this;
         }
 
-        public Builder setHeaderView(View headerView) {
+        public Builder setHeaderView(@Nullable View headerView) {
             this.headerView = headerView;
             return this;
         }
