@@ -10,7 +10,7 @@ ext {
     libraryDescription = 'Library for Android Large image View'
     siteUrl = "https://github.com/BrainXtech/BX-Large-Image-Viewer-Android"
     gitUrl = "https://github.com/BrainXtech/BX-Large-Image-Viewer-Android"
-    libraryVersion = "1.8"
+    libraryVersion = "2.0"
     developerId = "tahir456"
     developerName = "tahir zahoor"
     developerEmail = 'brainxdevelopers@gmail.com'

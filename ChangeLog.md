@@ -36,3 +36,10 @@ Changed compile to implementation.
 ```
 Updated library dependencies.
 ```
+
+#### Version: 2.0
+
+```
+Updated BxImageViewer to use Builder pattern.
+Fixed memory leaks.
+```

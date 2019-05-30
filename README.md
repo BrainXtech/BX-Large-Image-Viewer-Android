@@ -7,9 +7,9 @@
 1.Include the library
 
 ##### You can depend on the library through Gradle
-Add image-croppe to the dependencies block in your app level build.gradle:
+Add bx-large-image-viewer to the dependencies block in your app level build.gradle:
 ```groovy
-compile 'com.brainx.android:bx-large-image-viewer:1.8'
+implementation 'com.brainx.android:bx-large-image-viewer:2.0'
 ```
 
 ##### Or through Maven
@@ -17,7 +17,7 @@ compile 'com.brainx.android:bx-large-image-viewer:1.8'
     <dependency>
         <groupId>com.brainx.android</groupId>
         <artifactId>bx-large-image-viewer</artifactId>
-        <version>1.8</version>
+        <version>2.0</version>
         <type>pom</type>
     </dependency>
 ```
@@ -30,19 +30,18 @@ compile 'com.brainx.android:bx-large-image-viewer:1.8'
 ```
 
 
-3.The BXCrop configuration.
+3.The BXImageViewer configuration.
 
 ```
-  BxImageViewer bxImageViewer = BxImageViewer.getInstance(this);
-  bxImageViewer.initialization()
-               .setImageChangeListener(imageChangeListener)
-               .addDataSet(imageUrlList)
-               .setBackgroundColorRes(R.color.colorAccent)
-               .setProgressBarColorRes(R.color.colorWhite)
-               .setImageMarginPx(20)
-               .setStartPosition(0)
-               .setOverlayView(headerView)
-               .show();
+  BxImageViewer bxImageViewer = new BxImageViewer.Builder(this)
+                      .setImageChangeListener(imageChangeListener)
+                      .setDataSet(imageUrlList)
+                      .setBackgroundColorRes(R.color.colorAccent)
+                      .setProgressbarColorRes(R.color.colorWhite)
+                      .setImageMarginPx(20)
+                      .setStartPosition(0)
+                      .setHeaderView(headerView)
+                      .show();
 ```
 
 
