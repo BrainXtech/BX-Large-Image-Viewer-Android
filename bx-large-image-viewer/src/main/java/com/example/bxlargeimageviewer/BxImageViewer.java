@@ -202,16 +202,19 @@ public class BxImageViewer {
             this.imageMarginPixels = 0;
         }
 
+        @NonNull
         public Builder setImageChangeListener(@Nullable OnImageChangeListener imageChangeListener) {
             this.imageChangeListener = imageChangeListener;
             return this;
         }
 
+        @NonNull
         public Builder setDataSet(@Nullable List<String> imageURIs) {
             this.imageURIs = imageURIs;
             return this;
         }
 
+        @NonNull
         public Builder setStartPosition(int pos) {
             if (pos < 0) {
                 this.startingPos = 0;
@@ -221,26 +224,31 @@ public class BxImageViewer {
             return this;
         }
 
+        @NonNull
         public Builder setBackgroundColorRes(@ColorRes int color) {
             this.backgroundColor = mContext.getResources().getColor(color);
             return this;
         }
 
+        @NonNull
         public Builder setBackgroundColor(@ColorInt int color) {
             this.backgroundColor = color;
             return this;
         }
 
+        @NonNull
         public Builder setProgressbarColorRes(@ColorRes int color) {
             this.progressbarColor = mContext.getResources().getColor(color);
             return this;
         }
 
+        @NonNull
         public Builder setProgressbarColor(@ColorInt int color) {
             this.progressbarColor = color;
             return this;
         }
 
+        @NonNull
         public Builder setImageMarginRes(@DimenRes int dimen) {
             try {
                 this.imageMarginPixels = Math.round(mContext.getResources().getDimension(dimen));
@@ -249,22 +257,26 @@ public class BxImageViewer {
             return this;
         }
 
+        @NonNull
         public Builder setImageMarginPx(int dimen) {
             this.imageMarginPixels = dimen;
             return this;
         }
 
+        @NonNull
         public Builder setHeaderView(@Nullable View headerView) {
             this.headerView = headerView;
             return this;
         }
 
+        @NonNull
         public BxImageViewer show() {
             BxImageViewer viewer = this.create();
             viewer.show();
             return viewer;
         }
 
+        @NonNull
         public BxImageViewer create() {
             return new BxImageViewer(this);
         }
